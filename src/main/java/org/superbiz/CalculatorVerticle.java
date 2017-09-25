@@ -19,14 +19,18 @@ public class CalculatorVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
+
         final Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
 
         router.get("/sum/:a/:b").handler(this::sum);
+        router.get("/health").handler(this::health);
+
         vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+
     }
 
-    public void sum(RoutingContext routingContext) {
+    private void sum(RoutingContext routingContext) {
         final HttpServerRequest request = routingContext.request();
         final HttpServerResponse response = routingContext.response();
 
@@ -37,6 +41,10 @@ public class CalculatorVerticle extends AbstractVerticle {
 
         response.putHeader("content-type", "text/plain").end(result);
 
+    }
+
+    private void health(RoutingContext routingContext) {
+        routingContext.response().setStatusCode(200).end();
     }
 
 }
