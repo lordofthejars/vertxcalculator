@@ -27,7 +27,7 @@ public class CalculatorTest {
         Calculator calculator = new Calculator();
 
         // when
-        final int result = calculator.add(1, 3);
+        final int result = calculator.multiply(1, 3);
 
         // then
         assertThat(result).isEqualTo(0);
