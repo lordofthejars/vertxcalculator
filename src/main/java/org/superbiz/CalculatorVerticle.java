@@ -1,6 +1,7 @@
 package org.superbiz;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -18,7 +19,7 @@ public class CalculatorVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start(Future<Void> start) throws Exception {
 
         final Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
@@ -26,7 +27,7 @@ public class CalculatorVerticle extends AbstractVerticle {
         router.get("/sum/:a/:b").handler(this::sum);
         router.get("/health").handler(this::health);
 
-        vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+        vertx.createHttpServer().requestHandler(router::accept).listen(8080, result -> start.complete());
 
     }
 
